@@ -19,22 +19,22 @@ systemctl start nginx
 VALIDATE $? "Enabling and Starting Nginx"
 
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
-VALIDATE $? "Removing default content in Web Server"
+VALIDATE $? "Removing default content"
 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
-VALIDATE $? "Downlaoding Frontend content"
+VALIDATE $? "Downloading frontend"
 
 cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip &>>$LOG_FILE
-VALIDATE $? "Moving into app directory and unzipping frontend"
+VALIDATE $? "unzipping frontend"
 
-rm -rf /usr/share/nginx/html/* &>>$LOG_FILE #remove default content in nginx.conf and copy the one we created (replaced local host with catalogue server)
-VALIDATE $? "Removing default content in Web Server"
+rm -rf /etc/nginx/nginx.conf &>>$LOG_FILE
+VALIDATE $? "Remove default nginx conf"
 
-cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf 
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "Copying nginx.conf"
 
-systemctl restart nginx &>>$LOG_FILE
-VALIDATE $? "Restarting Nginx"
+systemctl restart nginx 
+VALIDATE $? "Restarting nginx"
 
 print_time
