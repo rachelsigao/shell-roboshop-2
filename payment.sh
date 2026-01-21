@@ -8,4 +8,3 @@ app_setup
 python_setup
 systemd_setup
 print_time
-

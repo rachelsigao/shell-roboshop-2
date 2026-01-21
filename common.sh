@@ -92,9 +92,17 @@ python_setup(){
 
     pip3 install -r requirements.txt &>>$LOG_FILE
     VALIDATE $? "Installing dependencies"
+}
 
-    cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOG_FILE
-    VALIDATE $? "Copying payment service"
+golang_setup(){
+    dnf install golang -y &>>$LOG_FILE
+    VALIDATE $? "Installing Golang"
+
+    cd /app 
+    go mod init $app_name 
+    go get 
+    go build &>>$LOG_FILE
+    VALIDATE $? "Downloading dependencies and building $app_name"
 }
 
 systemd_setup() {
