@@ -59,4 +59,29 @@ EOF
 
     aws route53 change-resource-record-sets --hosted-zone-id "$ZONE_ID" --change-batch "$CHANGE_BATCH"
     echo "$instance IP address: $IP"
+
+# Link command: Update the main domain with the frontend IP
+    if [ "$instance" == "frontend" ]; then
+        MAIN_RECORD_NAME="$DOMAIN_NAME."
+        MAIN_CHANGE_BATCH=$(cat <<EOF
+{
+  "Comment": "Linking main domain to frontend IP",
+  "Changes": [{
+    "Action": "UPSERT",
+    "ResourceRecordSet": {
+      "Name": "$MAIN_RECORD_NAME",
+      "Type": "A",
+      "TTL": 1,
+      "ResourceRecords": [{
+        "Value": "$IP"
+      }]
+    }
+  }]
+}
+EOF
+)
+        aws route53 change-resource-record-sets --hosted-zone-id "$ZONE_ID" --change-batch "$MAIN_CHANGE_BATCH"
+        echo "Main domain $DOMAIN_NAME updated with IP: $IP"
+    fi
+
 done
