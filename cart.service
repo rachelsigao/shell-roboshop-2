@@ -8,7 +8,7 @@ Environment=REDIS_PORT=6379
 Environment=CATALOGUE_HOST=catalogue.rachelsigao.online
 Environment=CATALOGUE_PORT=8080
 // highlight-end
-ExecStart=/bin/node/app/server.js
+ExecStart=/bin/node /app/server.js
 SyslogIdentifier=cart
 
 [Install]
